@@ -2,9 +2,10 @@
 ##This function 
 ##      Merges the training and the test sets to create one data set.
 ##      Extracts only the measurements on the mean and standard deviation for each measurement. 
-##      Uses descriptive activity names to name the activities in the data set
+##      Uses descriptive activity names to name the activities in the data set.
 ##      Appropriately labels the data set with descriptive variable names. 
-##      From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+##      From the data set in step 4, creates a second, independent tidy data set with the average of each 
+##		variable for each activity and each subject.
 ## 
 library(dplyr)
 run_analysis<-function (path)
@@ -31,8 +32,8 @@ run_analysis<-function (path)
         
         outputSet<-determineOutputSet(extractedData)
         #write the final cleaned, merged and summarised data to a file
-        opfilename<-paste("courseassignmentCleanData",as.character.Date(Sys.time()),sep="")
         write.table(outputSet,file="courseassignmentCleanData.txt",row.names = F)
+		#push results to function caller
         outputSet
 }
 
@@ -86,13 +87,13 @@ loadData<-function(dataset, path, activityLabels)
 
 
 ##Uses the map to identify appropriate columns in the merged data, extracts those columns and binds them into 
-##a new dataframe which returned a the extracted dataset. Note this somewaht 'knife and fork' code was written 
+##a new dataframe which is returned as the extracted dataset. Note this somewhat 'knife and fork' code was written 
 ##in Week 2 prior to the dplyr package being introduced.  
 ##Parameters:
 ##              map - a vector of column numbers for the required columns
 extractRequiredColumns<-function(mergeData,map)
 {
-        extract <-as.null()
+        extract <-as.null() #intialise return data object
         for (i in map)
         {
                 #get required col from merged data
@@ -115,11 +116,13 @@ extractRequiredColumns<-function(mergeData,map)
         
 }
 
-##This function uses the more elegant dplyr functionality of grouping a dataframe by specific and then performing a summarising function on the grouped data
-##In this specific case the group is intially by subject and then by activity for each subject and the summary is of the means of the results 
+##The following function uses the more elegant dplyr functionality of grouping a dataframe by specific and then performing 
+##a summarising function on the grouped data.
+##In this specific case the group is initially by subject and then by activity for each subject and the summary is of the 
+##means of the results. 
 ##for each variable on a per subject per activity basis. The dplyr functions are chained for efficiency of reading.
 ##Parameters:
-##              inset - the cleaned and merged data from the training and testing sets of acclerometer data
+##              inset - the cleaned and merged data from the training and testing sets of accelerometer data
 ##Output:       a new dataframe containing the summarised data on a per subject per activity basis.
 determineOutputSet<-function(inset)
 {
